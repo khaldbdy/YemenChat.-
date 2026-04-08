@@ -1,0 +1,31 @@
+name: YemenChat APK Build
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: تحميل المشروع
+        uses: actions/checkout@v3
+
+      - name: تثبيت Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: إعطاء صلاحية Gradle
+        run: chmod +x gradlew
+
+      - name: بناء APK
+        run: ./gradlew assembleDebug
+
+      - name: رفع ملف APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: YemenChat-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
